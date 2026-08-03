@@ -16,6 +16,7 @@ export interface REGISTER_REQUEST {
     name: string
     email: string
     password: string
+    mobile: string
 }
 export interface REGISTER_RESPONSE {
     message: string
