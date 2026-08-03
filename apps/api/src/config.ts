@@ -13,5 +13,7 @@ export const config = {
         : process.env.FRONTEND_LOCAL_URL,
 
     jwt_access_secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-    jwt_refresh_secret: process.env.JWT_REFRESH_TOKEN_SECRET
+    jwt_refresh_secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+    email: process.env.EMAIL,
+    email_password: process.env.EMAIL_PASSWORD,
 }

@@ -1,5 +1,5 @@
 export interface LOGIN_REQUEST {
-    email: string
+    username: string
     password: string
 }
 export interface LOGIN_RESPONSE {
