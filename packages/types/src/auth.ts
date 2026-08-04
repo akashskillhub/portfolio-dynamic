@@ -28,3 +28,19 @@ export type LOGOUT_REQUEST = void
 export interface LOGOUT_RESPONSE {
     message: string
 }
+
+
+export interface VERIFY_OTP_REQUEST {
+    username: string
+    otp: string
+}
+
+export interface VERIFY_OTP_RESPONSE {
+    message: string
+    result?: {
+        id: number,
+        email: string,
+        mobile: string,
+        access_token: string
+    }
+}
