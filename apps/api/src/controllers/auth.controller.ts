@@ -122,5 +122,11 @@ export async function verifyOTP(req: Request<{}, {}, VERIFY_OTP_REQUEST>, res: R
 
 
 export async function logout(req: Request, res: Response) {
-  res.json({ message: "Logout success" })
+  try {
+    res.clearCookie("refreshToken")
+    res.json({ message: "Logout success" })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: "something went wrong" })
+  }
 }

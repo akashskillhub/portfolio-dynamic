@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { LOGIN_REQUEST, LOGIN_RESPONSE, LOGOUT_REQUEST, LOGOUT_RESPONSE, REGISTER_REQUEST, REGISTER_RESPONSE } from '@repo/types';
+import { LOGIN_REQUEST, LOGIN_RESPONSE, LOGOUT_REQUEST, LOGOUT_RESPONSE, REGISTER_REQUEST, REGISTER_RESPONSE, VERIFY_OTP_REQUEST, VERIFY_OTP_RESPONSE } from '@repo/types';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -16,12 +16,13 @@ export const authApi = createApi({
                 },
             }),
 
-            signup: builder.mutation<REGISTER_RESPONSE, REGISTER_REQUEST>({
-                query: (userData) => {
+
+            verifyOtp: builder.mutation<VERIFY_OTP_RESPONSE, VERIFY_OTP_REQUEST>({
+                query: (otpData) => {
                     return {
-                        url: '/register',
+                        url: '/verify-otp',
                         method: 'POST',
-                        body: userData
+                        body: otpData
                     }
                 },
             }),
@@ -38,4 +39,4 @@ export const authApi = createApi({
     }
 });
 
-export const { useSigninMutation, useSignoutMutation, useSignupMutation } = authApi;
+export const { useSigninMutation, useSignoutMutation, useVerifyOtpMutation } = authApi;
