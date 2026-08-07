@@ -3,7 +3,7 @@ import { LOGIN_REQUEST, LOGIN_RESPONSE, LOGOUT_REQUEST, LOGOUT_RESPONSE, REGISTE
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: `/api/auth`, credentials: 'include' }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${process.env.EXPO_PUBLIC_LIVE_API_URL}/api/auth`, credentials: 'include' }),
     endpoints: (builder) => {
         return {
             signin: builder.mutation<LOGIN_RESPONSE, LOGIN_REQUEST>({
@@ -16,15 +16,6 @@ export const authApi = createApi({
                 },
             }),
 
-            signup: builder.mutation<REGISTER_RESPONSE, REGISTER_REQUEST>({
-                query: (userData) => {
-                    return {
-                        url: '/register',
-                        method: 'POST',
-                        body: userData
-                    }
-                },
-            }),
             signout: builder.mutation<LOGOUT_RESPONSE, LOGOUT_REQUEST>({
                 query: () => {
                     return {
@@ -38,4 +29,4 @@ export const authApi = createApi({
     }
 });
 
-export const { useSigninMutation, useSignoutMutation, useSignupMutation } = authApi;
+export const { useSigninMutation, useSignoutMutation } = authApi;

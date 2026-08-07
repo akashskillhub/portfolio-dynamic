@@ -19,7 +19,7 @@ export const config = {
     jwt_refresh_token_expiry: process.env.JWT_REFRESH_TOKEN_EXPIRY as SignOptions["expiresIn"] || "7d",
     email: process.env.EMAIL,
     email_password: process.env.EMAIL_PASSWORD,
-    otp_expiry: isProduction
-        ? process.env.OTP_EXPIRY
-        : 1000 * 60
+    otp_expiry: process.env.OTP_EXPIRY,
+    auth_window_ms: process.env.AUTH_WINDOW_MS as unknown as number,
+    auth_limit: process.env.AUTH_LIMIT as unknown as number,
 }
