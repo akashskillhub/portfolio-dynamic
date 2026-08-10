@@ -15,6 +15,13 @@
       "when": 1785834745416,
       "tag": "0001_nappy_zemo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786177614521,
+      "tag": "0002_foamy_thunderbird",
+      "breakpoints": true
     }
   ]
 }

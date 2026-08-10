@@ -44,3 +44,10 @@ export interface VERIFY_OTP_RESPONSE {
         access_token: string
     }
 }
+
+export interface REFRESH_RESPONSE {
+    message: string
+    result?: {
+        access_token: string
+    }
+}

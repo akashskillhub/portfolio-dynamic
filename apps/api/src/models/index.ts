@@ -1,1 +1,3 @@
-export { users } from "./User"
+export * from "./User"
+export * from "./Education"
+export * from "./Social"

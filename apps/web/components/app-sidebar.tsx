@@ -44,15 +44,15 @@ const data = {
       items: [
         {
           title: "Education",
-          url: "#",
+          url: "/admin/education",
         },
         {
           title: "Experience",
-          url: "#",
+          url: "/admin/experience",
         },
         {
           title: "Social Media",
-          url: "#",
+          url: "/admin/social",
         },
       ],
     },

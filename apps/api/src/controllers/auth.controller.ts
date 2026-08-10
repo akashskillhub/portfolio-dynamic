@@ -1,5 +1,6 @@
-import { LOGIN_REQUEST, VERIFY_OTP_REQUEST, VERIFY_OTP_RESPONSE } from "@repo/types"
+import { LOGIN_REQUEST, VERIFY_OTP_REQUEST, VERIFY_OTP_RESPONSE, REFRESH_RESPONSE } from "@repo/types"
 import { Request, Response } from "express"
+import jwt from "jsonwebtoken"
 import db from "../db"
 import { users } from "../models"
 import { eq, or } from "drizzle-orm"
@@ -128,5 +129,23 @@ export async function logout(req: Request, res: Response) {
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: "something went wrong" })
+  }
+}
+
+export async function refresh(req: Request, res: Response<REFRESH_RESPONSE>) {
+  try {
+    const token = req.cookies.refreshToken as string | undefined
+
+    if (!token) {
+      return res.status(401).json({ message: "unauthorized" })
+    }
+
+    const decoded = jwt.verify(token, config.jwt_refresh_secret) as { userId: number, role: string }
+    const access_token = generateAccessToken({ userId: decoded.userId, role: decoded.role })
+
+    res.json({ message: "token refreshed", result: { access_token } })
+  } catch (error) {
+    console.log(error)
+    res.status(401).json({ message: "invalid token" })
   }
 }
