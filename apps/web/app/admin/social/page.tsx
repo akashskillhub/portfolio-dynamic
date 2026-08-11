@@ -39,11 +39,13 @@ const Social = () => {
         }
     });
 
-const accessToken = useAppSelector((state) => state.auth.accessToken);
+    const accessToken = useAppSelector((state) => state.auth.accessToken);
     const { data: meData } = useGetMeQuery(undefined, { skip: !accessToken });
     const [createSocial, { isLoading, error }] = useCreateSocialMutation();
 
     const onSubmit = async (data: FormData) => {
+        console.log("hello");
+
         if (!meData?.result.id) return;
         await createSocial({ userId: meData.result.id, ...data });
         reset();
