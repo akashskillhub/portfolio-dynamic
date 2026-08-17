@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
     res.json({ message: "API running successfully" })
 })
 app.use("/auth", authLimiter, authRoutes)
-app.use("/admin", authMiddleware, adminRoutes)
+app.use("/admin", adminRoutes)
 
 const PORT = config.port
 

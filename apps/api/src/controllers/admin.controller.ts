@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import db from "../db"
 import { education, social, users } from "../models"
 import { eq } from "drizzle-orm"
+import cloud from "../lib/cloud"
 
 // ==================== USER ====================
 
@@ -180,4 +181,38 @@ export async function deleteSocial(req: Request<{ id: string }>, res: Response) 
     }
 }
 
+
+
+export async function updateAdminProfile(req: Request, res: Response) {
+    try {
+        // let profile
+        const { name, email, mobile } = req.body
+        const obj: {
+            name?: string,
+            email?: string,
+            mobile?: string,
+            profile?: string
+        } = {}
+        if (name) {
+            obj["name"] = name
+        }
+        if (email) {
+            obj["email"] = email
+        }
+        if (mobile) {
+            obj["mobile"] = mobile
+        }
+        if (req.file) {
+            const { secure_url } = await cloud.uploader.upload(req.file.path)
+            obj.profile = secure_url
+        }
+        await db.update(users).set(obj).where(eq(users.id, 1))
+        const [result] = await db.select().from(users).where(eq(users.id, 1))
+
+        res.json({ message: "profile update success", result })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "something went wrong" })
+    }
+}
 

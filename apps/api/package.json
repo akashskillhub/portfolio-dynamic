@@ -16,6 +16,7 @@
   "dependencies": {
     "@repo/types": "^1.0.0",
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^16.0.3",
@@ -23,6 +24,7 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.2",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0",
     "nodemailer": "^9.0.3",
     "pg": "^8.22.0"
   },
@@ -33,6 +35,7 @@
     "@types/express": "^5.0.6",
     "@types/express-rate-limit": "^5.1.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
     "@types/node": "^22.20.1",
     "@types/nodemailer": "^8.0.1",
     "@types/pg": "^8.20.0",

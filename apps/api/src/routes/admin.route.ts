@@ -9,7 +9,9 @@ import {
     updateSocial,
     deleteSocial,
     getMe,
+    updateAdminProfile,
 } from "../controllers/admin.controller"
+import { uploadProfile } from "../lib/upload"
 
 const router = Router()
 
@@ -30,6 +32,9 @@ router
     .get("/social", readSocial)
     .put("/social/:id", updateSocial)
     .delete("/social/:id", deleteSocial)
+
+router
+    .post("/update-profile", uploadProfile(), updateAdminProfile)
 
 
 export default router

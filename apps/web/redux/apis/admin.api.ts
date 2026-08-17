@@ -140,6 +140,17 @@ export const adminApi = createApi({
                 },
                 invalidatesTags: ['Social'],
             }),
+
+            updateProfile: builder.mutation<ADMIN_DELETE_RESPONSE, { id: number, fd: FormData }>({
+                query: (profileData) => {
+                    return {
+                        url: `/update-profile`,
+                        method: 'POST',
+                        body: profileData.fd
+                    }
+                },
+                invalidatesTags: [],
+            }),
         }
     }
 });
@@ -154,4 +165,5 @@ export const {
     useReadSocialQuery,
     useUpdateSocialMutation,
     useDeleteSocialMutation,
+    useUpdateProfileMutation
 } = adminApi;

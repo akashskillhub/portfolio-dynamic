@@ -22,6 +22,13 @@
       "when": 1786177614521,
       "tag": "0002_foamy_thunderbird",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786525459363,
+      "tag": "0003_classy_red_shift",
+      "breakpoints": true
     }
   ]
 }

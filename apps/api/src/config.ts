@@ -22,4 +22,8 @@ export const config = {
     otp_expiry: process.env.OTP_EXPIRY,
     auth_window_ms: process.env.AUTH_WINDOW_MS as unknown as number,
     auth_limit: process.env.AUTH_LIMIT as unknown as number,
+
+    cloude_name: process.env.CLOUD_NAME as string,
+    cloude_api_key: process.env.CLOUD_API as string,
+    cloude_api_secert: process.env.CLOUD_API_SECRET as string,
 }
