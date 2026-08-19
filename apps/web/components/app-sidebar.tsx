@@ -58,7 +58,7 @@ const data = {
     },
     {
       title: "Projects",
-      url: "#",
+      url: "/admin/project",
       icon: (
         <BotIcon
         />
@@ -66,12 +66,9 @@ const data = {
       items: [
         {
           title: "Personal",
-          url: "#",
+          url: "/admin/project",
         },
-        {
-          title: "Open source",
-          url: "#",
-        }
+
       ],
     }
   ],

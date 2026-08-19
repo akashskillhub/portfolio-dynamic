@@ -1,3 +1,5 @@
 export * from "./User"
 export * from "./Education"
 export * from "./Social"
+export * from "./Project"
+export * from "./Skill"

@@ -1,16 +1,18 @@
 export interface EDUCATION_REQUEST {
     userId?: number | null
-    degree_year: string
-    degree_college: string
-    degree_percent: string
+    education_name: string
+    percentage?: string | null
+    year?: string | null
+    isPursuing?: boolean | null
 }
 
 export interface EDUCATION_RESULT {
     id: number
     userId: number | null
-    degree_year: string | null
-    degree_college: string | null
-    degree_percent: string | null
+    education_name: string | null
+    percentage: string | null
+    year: string | null
+    isPursuing: boolean | null
 }
 
 export interface EDUCATION_RESPONSE {
@@ -60,4 +62,46 @@ export interface GET_ME_RESULT {
 export interface GET_ME_RESPONSE {
     message: string
     result: GET_ME_RESULT
+}
+
+export interface PROJECT_REQUEST {
+    userId?: number | null
+    name: string
+    description?: string | null
+    technology?: string[] | null
+    category?: string[] | null
+    source_url?: string | null
+    live_url?: string | null
+}
+
+export interface PROJECT_RESULT extends PROJECT_REQUEST {
+    id: number
+    userId: number | null
+    description: string | null
+    technology: string[] | null
+    category: string[] | null
+    source_url: string | null
+    live_url: string | null
+    hero: string | null
+}
+
+export interface PROJECT_RESPONSE {
+    message: string
+    result: PROJECT_RESULT
+}
+
+export interface SKILL_REQUEST {
+    userId?: number | null
+    skill_name: string
+}
+
+export interface SKILL_RESULT {
+    id: number
+    userId: number | null
+    skill_name: string | null
+}
+
+export interface SKILL_RESPONSE {
+    message: string
+    result: SKILL_RESULT
 }

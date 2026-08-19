@@ -4,6 +4,7 @@ export interface AuthUser {
     id: number;
     email: string;
     mobile: string;
+    name?: string;
 }
 
 export interface AuthState {
@@ -24,6 +25,9 @@ const authSlice = createSlice({
             state.user = action.payload.user;
             state.accessToken = action.payload.accessToken;
         },
+        setAccessToken: (state, action: PayloadAction<string>) => {
+            state.accessToken = action.payload;
+        },
         clearCredentials: (state) => {
             state.user = null;
             state.accessToken = null;
@@ -31,5 +35,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { setCredentials, clearCredentials } = authSlice.actions;
+export const { setCredentials, setAccessToken, clearCredentials } = authSlice.actions;
 export default authSlice.reducer;

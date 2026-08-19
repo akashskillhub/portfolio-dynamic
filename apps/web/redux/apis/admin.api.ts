@@ -7,6 +7,8 @@ import {
     EDUCATION_RESULT,
     EDUCATION_RESPONSE,
     GET_ME_RESPONSE,
+    PROJECT_RESULT,
+    PROJECT_RESPONSE,
     REFRESH_RESPONSE,
     SOCIAL_REQUEST,
     SOCIAL_RESULT,
@@ -48,7 +50,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const adminApi = createApi({
     reducerPath: 'adminApi',
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Education', 'Social'],
+    tagTypes: ['Education', 'Social', 'Project'],
     endpoints: (builder) => {
         return {
             // ==================== USER ====================
@@ -151,6 +153,46 @@ export const adminApi = createApi({
                 },
                 invalidatesTags: [],
             }),
+
+            // ==================== PROJECT ====================
+            createProject: builder.mutation<PROJECT_RESPONSE, FormData>({
+                query: (fd) => {
+                    return {
+                        url: '/project',
+                        method: 'POST',
+                        body: fd,
+                    }
+                },
+                invalidatesTags: ['Project'],
+            }),
+            readProjects: builder.query<ADMIN_LIST_RESPONSE<PROJECT_RESULT>, void>({
+                query: () => {
+                    return {
+                        url: '/project',
+                        method: 'GET',
+                    }
+                },
+                providesTags: ['Project'],
+            }),
+            updateProject: builder.mutation<PROJECT_RESPONSE, { id: number, fd: FormData }>({
+                query: ({ id, fd }) => {
+                    return {
+                        url: `/project/${id}`,
+                        method: 'PUT',
+                        body: fd,
+                    }
+                },
+                invalidatesTags: ['Project'],
+            }),
+            deleteProject: builder.mutation<ADMIN_DELETE_RESPONSE, { id: number }>({
+                query: ({ id }) => {
+                    return {
+                        url: `/project/${id}`,
+                        method: 'DELETE',
+                    }
+                },
+                invalidatesTags: ['Project'],
+            }),
         }
     }
 });
@@ -165,5 +207,9 @@ export const {
     useReadSocialQuery,
     useUpdateSocialMutation,
     useDeleteSocialMutation,
-    useUpdateProfileMutation
+    useUpdateProfileMutation,
+    useCreateProjectMutation,
+    useReadProjectsQuery,
+    useUpdateProjectMutation,
+    useDeleteProjectMutation
 } = adminApi;

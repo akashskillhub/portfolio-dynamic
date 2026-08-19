@@ -10,6 +10,14 @@ import {
     deleteSocial,
     getMe,
     updateAdminProfile,
+    createProject,
+    readProjects,
+    updateProject,
+    deleteProject,
+    createSkill,
+    readSkills,
+    updateSkill,
+    deleteSkill,
 } from "../controllers/admin.controller"
 import { uploadProfile } from "../lib/upload"
 
@@ -35,6 +43,20 @@ router
 
 router
     .post("/update-profile", uploadProfile(), updateAdminProfile)
+
+// project
+router
+    .post("/project", uploadProfile(), createProject)
+    .get("/project", readProjects)
+    .put("/project/:id", uploadProfile(), updateProject)
+    .delete("/project/:id", deleteProject)
+
+// skill
+router
+    .post("/skill", createSkill)
+    .get("/skill", readSkills)
+    .put("/skill/:id", updateSkill)
+    .delete("/skill/:id", deleteSkill)
 
 
 export default router
