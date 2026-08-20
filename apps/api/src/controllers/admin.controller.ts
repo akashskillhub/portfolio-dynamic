@@ -290,9 +290,17 @@ export async function deleteSkill(req: Request<{ id: string }>, res: Response) {
 
 // ==================== PROJECT CRUD ====================
 
+function toArray(value: unknown): string[] | undefined {
+    if (value === undefined) return undefined
+    if (Array.isArray(value)) return value
+    return value === "" ? [] : [value as string]
+}
+
 export async function createProject(req: Request<{}, {}, typeof project.$inferInsert>, res: Response) {
     try {
-        const { userId, name, description, technology, category, source_url, live_url } = req.body
+        const { userId, name, description, source_url, live_url } = req.body
+        const technology = toArray(req.body.technology)
+        const category = toArray(req.body.category)
 
         if (!userId || !name) {
             return res.status(400).json({ message: "userId and name are required" })
@@ -335,7 +343,9 @@ export async function readProjects(req: Request, res: Response) {
 export async function updateProject(req: Request<{ id: string }, {}, Partial<typeof project.$inferInsert>>, res: Response) {
     try {
         const { id } = req.params
-        const { userId, name, description, technology, category, source_url, live_url } = req.body
+        const { userId, name, description, source_url, live_url } = req.body
+        const technology = toArray(req.body.technology)
+        const category = toArray(req.body.category)
 
         const [exist] = await db.select().from(project).where(eq(project.id, Number(id))).limit(1)
         if (!exist) {

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { SKILL_RESULT } from '@repo/types'
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { Controller, useForm } from 'react-hook-form'
 import {
     Appbar,
@@ -59,7 +59,7 @@ const Personal = () => {
     const { user } = useAppSelector((state) => state.auth)
     const userId = user?.id
 
-    const { data: skillsData, isLoading: skillsLoading } = useReadSkillsQuery()
+    const { data: skillsData, isLoading: skillsLoading, isFetching: skillsFetching, refetch: refetchSkills } = useReadSkillsQuery()
     const [createSkill, { isLoading: isCreatingSkill, error: createSkillError }] = useCreateSkillMutation()
     const [updateSkill, { isLoading: isUpdatingSkill, error: updateSkillError }] = useUpdateSkillMutation()
     const [deleteSkill, { isLoading: isDeletingSkill, error: deleteSkillError }] = useDeleteSkillMutation()
@@ -140,7 +140,12 @@ const Personal = () => {
             <Appbar.Header>
                 <Appbar.Content title="Personal" />
             </Appbar.Header>
-            <ScrollView contentContainerStyle={styles.content}>
+            <ScrollView
+                contentContainerStyle={styles.content}
+                refreshControl={
+                    <RefreshControl refreshing={skillsFetching} onRefresh={refetchSkills} />
+                }
+            >
                 <Card mode="outlined" style={styles.card}>
                     <Card.Title
                         title={user?.email ?? "Portfolio Owner"}

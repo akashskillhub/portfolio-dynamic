@@ -6,7 +6,6 @@ import {
     EDUCATION_RESULT,
     EDUCATION_RESPONSE,
     GET_ME_RESPONSE,
-    PROJECT_REQUEST,
     PROJECT_RESULT,
     PROJECT_RESPONSE,
     REFRESH_RESPONSE,
@@ -94,11 +93,11 @@ export const adminApi = createApi({
             }),
 
             // ==================== PROJECT ====================
-            createProject: builder.mutation<PROJECT_RESPONSE, PROJECT_REQUEST>({
-                query: (data) => ({
+            createProject: builder.mutation<PROJECT_RESPONSE, FormData>({
+                query: (fd) => ({
                     url: '/project',
                     method: 'POST',
-                    body: data,
+                    body: fd,
                 }),
                 invalidatesTags: ['Project'],
             }),
@@ -109,11 +108,11 @@ export const adminApi = createApi({
                 }),
                 providesTags: ['Project'],
             }),
-            updateProject: builder.mutation<PROJECT_RESPONSE, { id: number } & Partial<PROJECT_REQUEST>>({
-                query: ({ id, ...body }) => ({
+            updateProject: builder.mutation<PROJECT_RESPONSE, { id: number, fd: FormData }>({
+                query: ({ id, fd }) => ({
                     url: `/project/${id}`,
                     method: 'PUT',
-                    body,
+                    body: fd,
                 }),
                 invalidatesTags: ['Project'],
             }),

@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { PROJECT_RESULT } from '@repo/types'
+import * as ImagePicker from 'expo-image-picker'
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Image, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { Controller, useForm } from 'react-hook-form'
 import {
     Appbar,
@@ -95,23 +96,50 @@ const ProjectForm = ({
         }
     }, [project, reset])
 
-    const onSubmit = async (values: ProjectFormValues) => {
-        const payload = {
-            userId,
-            name: values.name,
-            description: values.description,
-            technology: values.technology
-                ?.split(",")
-                .map((t) => t.trim())
-                .filter(Boolean),
-            category: values.category,
-            source_url: values.source_url,
-            live_url: values.live_url,
+    const [hero, setHero] = useState<ImagePicker.ImagePickerAsset | undefined>(undefined)
+    const [preview, setPreview] = useState<string | undefined>(project?.hero ?? undefined)
+
+    useEffect(() => {
+        setPreview(hero ? hero.uri : project?.hero ?? undefined)
+    }, [hero, project])
+
+    const pickImage = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [16, 9],
+            quality: 0.7,
+        })
+        if (!result.canceled) {
+            setHero(result.assets[0])
         }
+    }
+
+    const onSubmit = async (values: ProjectFormValues) => {
+        const fd = new FormData()
+        fd.append("userId", String(userId))
+        fd.append("name", values.name)
+        if (values.description) fd.append("description", values.description)
+        values.technology
+            ?.split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
+            .forEach((t) => fd.append("technology", t))
+        values.category.forEach((c) => fd.append("category", c))
+        if (values.source_url) fd.append("source_url", values.source_url)
+        if (values.live_url) fd.append("live_url", values.live_url)
+        if (hero) {
+            fd.append("hero", {
+                uri: hero.uri,
+                name: hero.fileName ?? "hero.jpg",
+                type: hero.mimeType ?? "image/jpeg",
+            } as unknown as Blob)
+        }
+
         if (project) {
-            await updateProject({ id: project.id, ...payload }).unwrap()
+            await updateProject({ id: project.id, fd }).unwrap()
         } else {
-            await createProject(payload).unwrap()
+            await createProject(fd).unwrap()
         }
         onDone()
     }
@@ -229,6 +257,17 @@ const ProjectForm = ({
                 )}
             />
             {apiError && <HelperText type="error" visible>{apiError}</HelperText>}
+            <Button
+                mode="outlined"
+                icon="image"
+                onPress={pickImage}
+                style={styles.heroButton}
+            >
+                {hero || project?.hero ? "Change hero image" : "Pick hero image"}
+            </Button>
+            {preview && (
+                <Image source={{ uri: preview }} style={styles.heroPreview} resizeMode="cover" />
+            )}
             <Dialog.Actions>
                 <Button mode="contained" loading={isSaving} disabled={isSaving} onPress={handleSubmit(onSubmit)}>
                     {project ? "Update" : "Add"}
@@ -248,7 +287,7 @@ function editingError(
 
 const Projects = () => {
     const userId = useAppSelector((state) => state.auth.user?.id)
-    const { data, isLoading } = useReadProjectsQuery()
+    const { data, isLoading, isFetching, refetch } = useReadProjectsQuery()
     const [deleteProject, { isLoading: isDeleting, error: deleteError }] = useDeleteProjectMutation()
 
     const [formOpen, setFormOpen] = useState(false)
@@ -281,13 +320,21 @@ const Projects = () => {
             <Appbar.Header>
                 <Appbar.Content title="Projects" />
             </Appbar.Header>
-            <ScrollView contentContainerStyle={styles.content}>
+            <ScrollView
+                contentContainerStyle={styles.content}
+                refreshControl={
+                    <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+                }
+            >
                 {isLoading && <Text style={styles.center}>Loading...</Text>}
                 {data && data.result.length === 0 && (
                     <Text style={styles.center}>No projects found. Tap + to add one.</Text>
                 )}
                 {data?.result.map((project) => (
                     <Card key={project.id} mode="outlined" style={styles.card}>
+                        {project.hero && (
+                            <Card.Cover source={{ uri: project.hero }} resizeMode="cover" />
+                        )}
                         <Card.Title
                             title={project.name}
                             subtitle={project.category?.join(", ")}
@@ -369,6 +416,8 @@ const styles = StyleSheet.create({
     cardActions: { flexDirection: "row" },
     checkboxRow: { flexDirection: "row", alignItems: "center" },
     fab: { position: "absolute", right: 16, bottom: 16 },
+    heroButton: { marginTop: 12 },
+    heroPreview: { width: "100%", height: 140, borderRadius: 8, marginTop: 12 },
 })
 
 export default Projects

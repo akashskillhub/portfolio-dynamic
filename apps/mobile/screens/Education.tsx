@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { EDUCATION_RESULT } from '@repo/types'
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { Controller, useForm } from 'react-hook-form'
 import {
     Appbar,
@@ -183,7 +183,7 @@ const EducationForm = ({
 
 const Education = () => {
     const userId = useAppSelector((state) => state.auth.user?.id)
-    const { data, isLoading } = useReadEducationQuery()
+    const { data, isLoading, isFetching, refetch } = useReadEducationQuery()
     const [deleteEducation, { isLoading: isDeleting, error: deleteError }] = useDeleteEducationMutation()
 
     const [formOpen, setFormOpen] = useState(false)
@@ -216,7 +216,12 @@ const Education = () => {
             <Appbar.Header>
                 <Appbar.Content title="Education" />
             </Appbar.Header>
-            <ScrollView contentContainerStyle={styles.content}>
+            <ScrollView
+                contentContainerStyle={styles.content}
+                refreshControl={
+                    <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+                }
+            >
                 {isLoading && <Text style={styles.center}>Loading...</Text>}
                 {data && data.result.length === 0 && (
                     <Text style={styles.center}>No education records found. Tap + to add one.</Text>

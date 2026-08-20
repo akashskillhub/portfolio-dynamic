@@ -4,6 +4,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import authRoutes from "./routes/auth.routes"
 import adminRoutes from "./routes/admin.route"
+import publicRoutes from "./routes/public.route"
 import { config } from "./config"
 import { authLimiter } from "./lib/limiter"
 import { authMiddleware } from "./middleware/auth.middleware"
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 })
 app.use("/auth", authLimiter, authRoutes)
 app.use("/admin", adminRoutes)
+app.use("/public", publicRoutes)
 
 const PORT = config.port
 

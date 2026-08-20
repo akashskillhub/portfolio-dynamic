@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { ScrollView } from 'react-native'
+import { RefreshControl, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Appbar, Button, Card, Divider, List, Snackbar } from 'react-native-paper'
 import { useSignoutMutation } from '../redux/apis/auth.api'
+import { useGetMeQuery } from '../redux/apis/admin.api'
 import { clearCredentials } from '../redux/slices/auth.slice'
 import { useAppSelector } from '../redux/store'
 
@@ -10,6 +11,7 @@ const Settings = () => {
     const dispatch = useDispatch()
     const { user } = useAppSelector((state) => state.auth)
     const [signout, { isLoading }] = useSignoutMutation()
+    const { data: me, isFetching, refetch } = useGetMeQuery()
     const [visible, setVisible] = useState(false)
     const [notice, setNotice] = useState("")
 
@@ -25,7 +27,11 @@ const Settings = () => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+            }
+        >
             <Appbar.Header>
                 <Appbar.Content title="Settings" />
             </Appbar.Header>
@@ -34,13 +40,13 @@ const Settings = () => {
                 <Card.Content>
                     <List.Item
                         title="Email"
-                        description={user?.email ?? "Not available"}
+                        description={me?.result.email ?? user?.email ?? "Not available"}
                         left={() => <List.Icon icon="email" />}
                     />
                     <Divider />
                     <List.Item
                         title="Mobile"
-                        description={user?.mobile ?? "Not available"}
+                        description={me?.result.mobile ?? user?.mobile ?? "Not available"}
                         left={() => <List.Icon icon="phone" />}
                     />
                 </Card.Content>
